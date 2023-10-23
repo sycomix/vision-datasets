@@ -25,7 +25,7 @@ class MultitaskMerge(MergeStrategy):
 
     def check(self, *args: DatasetManifest):
         super().check(*args)
-        if not all([x.is_multitask for x in args]):
+        if not all(x.is_multitask for x in args):
             raise ValueError('all manifests must be multitask.')
 
         for i in range(len(args)-1):

@@ -169,7 +169,7 @@ def guess_encoding(tsv_file):
 
 def verify_and_correct_box_or_none(lp, box, data_format, img_w, img_h):
     error_msg = f'{lp} Illegal box [{", ".join([str(x) for x in box])}], img wxh: {img_w}, {img_h}'
-    if len([x for x in box if x < 0]) > 0:
+    if [x for x in box if x < 0]:
         logger.error(f'{error_msg}. Skip this box.')
         return None
 

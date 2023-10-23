@@ -18,9 +18,9 @@ class MergeStrategy(abc.ABC):
         pass
 
     def check(self, *args: DatasetManifest):
-        if len(args) < 1:
+        if not args:
             raise ValueError('less than one manifest provided.')
-        if any([arg is None for arg in args]):
+        if any(arg is None for arg in args):
             raise ValueError('"None" manifest found')
 
 
@@ -67,9 +67,9 @@ class SingleTaskMerge(MergeStrategy):
     def check(self, *args: DatasetManifest):
         super().check(*args)
 
-        if any([x.is_multitask for x in args]):
+        if any(x.is_multitask for x in args):
             raise ValueError('All manifests must be of the same data type and single task.')
-        if any([x.data_type != args[0].data_type for x in args]):
+        if any(x.data_type != args[0].data_type for x in args):
             raise ValueError('All manifests must be of the same data type.')
 
     def _combine_categories(self, manifests: DatasetManifest):

@@ -54,7 +54,10 @@ def check_images(dataset: VisionDataset):
 
 
 def _is_integer(bbox):
-    return all([isinstance(x, int) or (isinstance(x, float) and x.is_integer()) for x in bbox])
+    return all(
+        isinstance(x, int) or (isinstance(x, float) and x.is_integer())
+        for x in bbox
+    )
 
 
 def check_box(bbox, img_w, img_h):
@@ -70,7 +73,12 @@ def classification_detection_check(dataset: VisionDataset):
     n_imgs_by_class = {x: 0 for x in range(len(dataset.categories))}
     for sample_idx, sample in enumerate(dataset.dataset_manifest.images):
         labels = sample.labels
-        c_ids = set([label[0] if dataset.dataset_info.type == DatasetTypes.IMAGE_OBJECT_DETECTION else label for label in labels])
+        c_ids = {
+            label[0]
+            if dataset.dataset_info.type == DatasetTypes.IMAGE_OBJECT_DETECTION
+            else label
+            for label in labels
+        }
         for c_id in c_ids:
             n_imgs_by_class[c_id] += 1
 
@@ -80,10 +88,11 @@ def classification_detection_check(dataset: VisionDataset):
                 errors.append(f'Image {sample_idx} has invalid width or height: {w}, {h}')
                 continue
 
-            for box_id, box in enumerate(labels):
-                if not check_box(box[1:], w, h):
-                    errors.append(f'Image {sample_idx}, box {box_id} is invalid: {box}\n')
-
+            errors.extend(
+                f'Image {sample_idx}, box {box_id} is invalid: {box}\n'
+                for box_id, box in enumerate(labels)
+                if not check_box(box[1:], w, h)
+            )
     c_id_with_max_images = max(n_imgs_by_class, key=n_imgs_by_class.get)
     c_id_with_min_images = min(n_imgs_by_class, key=n_imgs_by_class.get)
     mean_images = sum(n_imgs_by_class.values()) / len(n_imgs_by_class)
@@ -131,9 +140,12 @@ def main():
     for usage in usages:
         logger.info(f'{prefix} Check dataset with usage: {usage}.')
 
-        # if args.local_dir is none, then this check will directly try to access data from azure blob. Images must be present in uncompressed folder on azure blob.
-        dataset = dataset_hub.create_vision_dataset(name=dataset_info.name, version=args.version, usage=usage, coordinates='absolute')
-        if dataset:
+        if dataset := dataset_hub.create_vision_dataset(
+            name=dataset_info.name,
+            version=args.version,
+            usage=usage,
+            coordinates='absolute',
+        ):
             err_msg_file = pathlib.Path(f'{args.name}_{usage}_errors.txt')
             errors = []
             if args.data_type in [DatasetTypes.IMAGE_CLASSIFICATION_MULTICLASS, DatasetTypes.IMAGE_CLASSIFICATION_MULTILABEL, DatasetTypes.IMAGE_OBJECT_DETECTION]:

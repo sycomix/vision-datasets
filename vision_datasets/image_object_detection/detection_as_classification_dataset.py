@@ -78,7 +78,7 @@ class DetectionAsClassificationIgnoreBoxesDataset(DetectionAsClassificationBaseD
 
     @staticmethod
     def _od_to_ic_labels(labels: typing.List[ImageObjectDetectionLabelManifest]):
-        category_ids = sorted(list(set([label.category_id for label in labels])))
+        category_ids = sorted(list({label.category_id for label in labels}))
         return [ImageClassificationLabelManifest(x) for x in category_ids]
 
 

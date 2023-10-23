@@ -483,8 +483,8 @@ class TestGreedyFewShotsSampling(unittest.TestCase):
         images = [ImageDataManifest(f'{i}', f'./{i}.jpg', 10, 10, [ImageClassificationLabelManifest(i)]) for i in range(num_classes)] * 100
         dataset_manifest = DatasetManifest(images, _generate_categories(num_classes), DatasetTypes.IMAGE_CLASSIFICATION_MULTICLASS)
 
+        n_sample_per_class = 1
         for i in range(10):
-            n_sample_per_class = 1
             strategy = SampleStrategyFactory.create(DatasetTypes.IMAGE_CLASSIFICATION_MULTICLASS, SampleStrategyType.FewShot, SampleByFewShotConfig(i, n_sample_per_class))
             sampler = ManifestSampler(strategy)
             sampled = sampler.run(dataset_manifest)
@@ -678,7 +678,11 @@ class TestSpawn(unittest.TestCase):
         self.assertEqual(cnt, [40, 40, 40])
 
     def cnt_multiclass_labels(self, manifest):
-        n_images_by_classe = [0] * len(manifest.categories) if not manifest.is_multitask else [0] * sum([len(x) for x in manifest.categories.values()])
+        n_images_by_classe = (
+            [0] * len(manifest.categories)
+            if not manifest.is_multitask
+            else [0] * sum(len(x) for x in manifest.categories.values())
+        )
         for im in manifest.images:
             for label in im.labels:
                 n_images_by_classe[label.category_id] += 1

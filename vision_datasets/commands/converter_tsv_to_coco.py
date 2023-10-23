@@ -119,7 +119,9 @@ def main():
                 if (img_idx+1) % 2000 == 0:
                     logger.info(f'Processed {img_idx} images.')
 
-        coco_file_name = pathlib.Path(os.path.splitext(os.path.basename(tsv_file_name))[0] + '.json')
+        coco_file_name = pathlib.Path(
+            f'{os.path.splitext(os.path.basename(tsv_file_name))[0]}.json'
+        )
         if args.task != 'caption':
             categories = categories or [{'id': idx + 1, 'name': name} for name, idx in label_name_to_idx.items()]
             write_to_json_file_utf8({'images': images, 'annotations': annotations, 'categories': categories}, coco_file_name)

@@ -92,8 +92,7 @@ class DatasetDownloader:
 
     @staticmethod
     def _keep_until_including_pattern(s, pattern):
-        match = re.search(pattern, s)
-        if match:
+        if match := re.search(pattern, s):
             end = match.end()
             return s[:end]
         else:

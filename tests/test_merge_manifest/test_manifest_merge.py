@@ -42,7 +42,13 @@ class TestMergeManifest:
 
     def check(self, manifest1, manifest2, merged):
         assert len(manifest1.images) + len(manifest2.images) == len(merged.images)
-        n_categories = len(set([x.name for x in (manifest1.categories or []) + (manifest2.categories or [])]))
+        n_categories = len(
+            {
+                x.name
+                for x in (manifest1.categories or [])
+                + (manifest2.categories or [])
+            }
+        )
         assert n_categories == len(merged.categories or [])
 
     @staticmethod

@@ -47,11 +47,10 @@ def main():
         manifest, _, _ = hub.create_dataset_manifest(name=args.name, version=args.version, usage=usage)
         if manifest is None:
             logger.info(f'{prefix} No split for {usage} available.')
+        elif args.format == LineFormat.JSONL:
+            convert_to_jsonl(manifest, args.output_dir / f"{args.name}.{usage}.jsonl", args.flatten)
         else:
-            if args.format == LineFormat.JSONL:
-                convert_to_jsonl(manifest, args.output_dir / f"{args.name}.{usage}.jsonl", args.flatten)
-            else:
-                convert_to_tsv(manifest, args.output_dir / f"{args.name}.{usage}.tsv")
+            convert_to_tsv(manifest, args.output_dir / f"{args.name}.{usage}.tsv")
 
 
 if __name__ == '__main__':

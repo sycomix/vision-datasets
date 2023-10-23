@@ -11,10 +11,7 @@ def _data_type_to_enum(val: str):
         'image_retrieval': DatasetTypes.TEXT_2_IMAGE_RETRIEVAL
     }
 
-    if val.lower() in legacy_mapping:
-        return legacy_mapping[val.lower()]
-
-    return DatasetTypes[val.upper()]
+    return legacy_mapping.get(val.lower(), DatasetTypes[val.upper()])
 
 
 class DatasetInfoFactory:
@@ -74,10 +71,10 @@ class MultiTaskDatasetInfo(BaseDatasetInfo):
         super(MultiTaskDatasetInfo, self).__init__(dataset_info_dict)
 
         tasks = dataset_info_dict['tasks']
-        info_dict = {}
-        for task_name, task_info in tasks.items():
-            info_dict[task_name] = DatasetInfo({**dataset_info_dict, **task_info})
-
+        info_dict = {
+            task_name: DatasetInfo({**dataset_info_dict, **task_info})
+            for task_name, task_info in tasks.items()
+        }
         self.sub_task_infos = info_dict
 
     @property

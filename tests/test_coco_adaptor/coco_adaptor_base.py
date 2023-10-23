@@ -44,7 +44,8 @@ class BaseCocoAdaptor:
 
     def check(self, manifest, coco_dict):
         assert len(manifest.images) == len(coco_dict['images'])
-        categories = coco_dict.get('categories')
-        if categories:
+        if categories := coco_dict.get('categories'):
             assert manifest.categories and len(manifest.categories) == len(categories)
-        assert sum([len(img.labels) for img in manifest.images]) == len(coco_dict['annotations'])
+        assert sum(len(img.labels) for img in manifest.images) == len(
+            coco_dict['annotations']
+        )

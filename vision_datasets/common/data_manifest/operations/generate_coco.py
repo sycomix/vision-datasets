@@ -24,8 +24,15 @@ class GenerateCocoDictBase(Operation):
         return annotations
 
     def _generate_images(self, manifest):
-        images = [{'id': i + 1, 'file_name': x.img_path, 'width': x.width, 'height': x.height} for i, x in enumerate(manifest.images)]
-        return images
+        return [
+            {
+                'id': i + 1,
+                'file_name': x.img_path,
+                'width': x.width,
+                'height': x.height,
+            }
+            for i, x in enumerate(manifest.images)
+        ]
 
     def run(self, *args):
         if len(args) != 1:
@@ -54,7 +61,7 @@ class GenerateCocoDictBase(Operation):
     @staticmethod
     def _filter_none(dict_val: dict):
         to_del = []
-        for key in dict_val.keys():
+        for key in dict_val:
             if dict_val[key] is None:
                 to_del.append(key)
             elif isinstance(dict_val[key], dict):

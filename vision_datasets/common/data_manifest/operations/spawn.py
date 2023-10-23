@@ -45,7 +45,9 @@ class Spawn(Operation):
         manifest = args[0]
         cfg = self.config
         if cfg.instance_weights:
-            if len(cfg.instance_weights) != len(manifest) or any([x < 0 for x in cfg.instance_weights]):
+            if len(cfg.instance_weights) != len(manifest) or any(
+                x < 0 for x in cfg.instance_weights
+            ):
                 raise ValueError
 
             sum_weights = sum(cfg.instance_weights)

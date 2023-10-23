@@ -21,7 +21,9 @@ def coco_dict_to_manifest(task, coco_dict):
 def coco_dict_to_manifest_multitask(tasks, coco_dicts):
     assert len(tasks) == len(coco_dicts)
     task_names = [f'{i}_{task}' for i, task in enumerate(tasks)]
-    adaptor = CocoManifestAdaptorFactory.create(DatasetTypes.MULTITASK, {x: y for x, y in zip(task_names, tasks)})
+    adaptor = CocoManifestAdaptorFactory.create(
+        DatasetTypes.MULTITASK, dict(zip(task_names, tasks))
+    )
     coco_files = {}
     with tempfile.TemporaryDirectory() as temp_dir:
         for i in range(len(tasks)):
@@ -386,8 +388,7 @@ def two_tasks_test_cases(coco_database):
     two_tasks = list(itertools.product(tasks, tasks))
     coco_dicts = [list(itertools.product(coco_database[task1], coco_database[task2])) for task1, task2 in two_tasks]
     assert len(two_tasks) == len(coco_dicts)
-    tasks_coco_dict = [(two_tasks[i], y) for i, x in enumerate(coco_dicts) for y in x]
-    return tasks_coco_dict
+    return [(two_tasks[i], y) for i, x in enumerate(coco_dicts) for y in x]
 
 
 coco_database[DatasetTypes.MULTITASK] = two_tasks_test_cases(coco_database)

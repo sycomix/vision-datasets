@@ -28,12 +28,11 @@ class TorchDataset(Dataset):
         return self.dataset.dataset_info
 
     def __getitem__(self, index):
-        if isinstance(index, int):
-            image, target, idx_str = self.dataset[index]
-            image, target = self.transform(image, target)
-            return image, target, idx_str
-        else:
+        if not isinstance(index, int):
             return [self.transform(img, target) + (idx,) for img, target, idx in self.dataset[index]]
+        image, target, idx_str = self.dataset[index]
+        image, target = self.transform(image, target)
+        return image, target, idx_str
 
     def __len__(self):
         return len(self.dataset)

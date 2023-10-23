@@ -14,8 +14,7 @@ class TestBase64Utils(unittest.TestCase):
         assert len(size) == 2
 
         imarray = numpy.random.rand(size[0], size[1], 3) * 255
-        im = Image.fromarray(imarray.astype('uint8')).convert('RGB')
-        return im
+        return Image.fromarray(imarray.astype('uint8')).convert('RGB')
 
     def test_b64_to_file_loses_no_info(self):
         with tempfile.TemporaryDirectory() as temp_dir:

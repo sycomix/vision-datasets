@@ -23,9 +23,9 @@ class PILImageLoader:
             orientation -= 1
             if orientation >= 4:
                 image = image.transpose(Image.TRANSPOSE)
-            if orientation == 2 or orientation == 3 or orientation == 6 or orientation == 7:
+            if orientation in {2, 3, 6, 7}:
                 image = image.transpose(Image.FLIP_TOP_BOTTOM)
-            if orientation == 1 or orientation == 2 or orientation == 5 or orientation == 6:
+            if orientation in {1, 2, 5, 6}:
                 image = image.transpose(Image.FLIP_LEFT_RIGHT)
         image = image.convert('RGB')
         image.format = img_format

@@ -11,5 +11,5 @@ class Operation(abc.ABC):
     def __init__(self) -> None:
         pass
 
-    def run(*args: DatasetManifest):
+    def run(self):
         pass

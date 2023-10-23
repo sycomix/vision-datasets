@@ -34,13 +34,12 @@ class ImageLabelManifest(ManifestBase):
 
     @property
     def label_data(self):
-        if self._label_data is None:  # lazy load
-            if self.label_path:
-                self._label_data = self._read_label_data()
-                self._check_label(self._label_data)
-            else:
+        if self._label_data is None:
+            if not self.label_path:
                 return None
 
+            self._label_data = self._read_label_data()
+            self._check_label(self._label_data)
         return self._label_data
 
     @label_data.setter
@@ -133,7 +132,7 @@ class ImageDataManifest(ManifestBase):
         if not isinstance(self.labels, dict):
             return False
 
-        return not any(labels for labels in self.labels.values())
+        return not any(self.labels.values())
 
 
 class CategoryManifest(ManifestBase):

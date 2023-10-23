@@ -23,6 +23,15 @@ class TestObjectDetection(BaseCocoAdaptor):
 
     def check(self, manifest, coco_dict):
         super().check(manifest, coco_dict)
-        is_crowd_cnt_in_manifest = sum([sum([0 if x.additional_info.get('iscrowd', 0) == 0 else 1 for x in image.labels]) for image in manifest.images])
-        is_crowd_cnt_in_coco = sum([0 if ann.get('iscrowd', 0) == 0 else 1 for ann in coco_dict['annotations']])
+        is_crowd_cnt_in_manifest = sum(
+            sum(
+                0 if x.additional_info.get('iscrowd', 0) == 0 else 1
+                for x in image.labels
+            )
+            for image in manifest.images
+        )
+        is_crowd_cnt_in_coco = sum(
+            0 if ann.get('iscrowd', 0) == 0 else 1
+            for ann in coco_dict['annotations']
+        )
         assert is_crowd_cnt_in_coco == is_crowd_cnt_in_manifest

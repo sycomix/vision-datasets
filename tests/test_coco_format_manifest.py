@@ -189,8 +189,12 @@ class TestCreateCocoDatasetManifest(unittest.TestCase):
     def test_image_matting_manifest(self):
         zip_file_path = pathlib.Path(__file__).resolve().parent / 'image_matting_test_data.zip'
         file_reader = FileReader()
-        img_0_matting = np.asarray(Image.open(file_reader.open(str(zip_file_path)+'@mask/test_1.png')))
-        img_1_matting = np.asarray(Image.open(file_reader.open(str(zip_file_path)+'@mask/test_2.png')))
+        img_0_matting = np.asarray(
+            Image.open(file_reader.open(f'{str(zip_file_path)}@mask/test_1.png'))
+        )
+        img_1_matting = np.asarray(
+            Image.open(file_reader.open(f'{str(zip_file_path)}@mask/test_2.png'))
+        )
 
         dataset_manifest = TestCases.get_manifest(DatasetTypes.IMAGE_MATTING, 2)
         self.assertIsInstance(dataset_manifest, DatasetManifest)
@@ -203,8 +207,12 @@ class TestCreateCocoDatasetManifest(unittest.TestCase):
         image_matting_manifest_dict = TestCases.image_matting_manifest_dicts[2]
         zip_file_path = pathlib.Path(__file__).resolve().parent / 'image_matting_test_data.zip'
         file_reader = FileReader()
-        img_0_matting = Image.open(file_reader.open(str(zip_file_path)+'@mask/test_1.png'))
-        img_1_matting = Image.open(file_reader.open(str(zip_file_path)+'@mask/test_2.png'))
+        img_0_matting = Image.open(
+            file_reader.open(f'{str(zip_file_path)}@mask/test_1.png')
+        )
+        img_1_matting = Image.open(
+            file_reader.open(f'{str(zip_file_path)}@mask/test_2.png')
+        )
 
         task_types = {'task1': DatasetTypes.IMAGE_CLASSIFICATION_MULTILABEL, 'task2': DatasetTypes.IMAGE_MATTING}
 

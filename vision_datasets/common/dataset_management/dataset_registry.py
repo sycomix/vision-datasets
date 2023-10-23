@@ -35,10 +35,9 @@ class DatasetRegistry:
             import importlib.resources as pkg_resources
 
             from vision_datasets.common import resources
-            datasets_json = pkg_resources.read_text(resources, json_file_name)
+            return pkg_resources.read_text(resources, json_file_name)
         else:
             import pkgutil
             resource_package = 'vision_datasets'
             resource_path = '/'.join(('resources', json_file_name))
-            datasets_json = pkgutil.get_data(resource_package, resource_path)
-        return datasets_json
+            return pkgutil.get_data(resource_package, resource_path)

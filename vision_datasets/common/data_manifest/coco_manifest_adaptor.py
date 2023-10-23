@@ -80,7 +80,7 @@ class CocoManifestWithCategoriesAdaptor(CocoManifestAdaptorBase):
             img = images_by_id[annotation['image_id']]
             self.process_label(img, annotation, coco_manifest, label_id_to_pos)
 
-        images = [x for x in images_by_id.values()]
+        images = list(images_by_id.values())
         images.sort(key=lambda x: x.id)
 
         return images, categories
@@ -111,7 +111,7 @@ class CocoManifestWithoutCategoriesAdaptor(CocoManifestAdaptorBase):
             img = images_by_id[annotation['image_id']]
             self.process_label(img, annotation, coco_manifest)
 
-        images = [x for x in images_by_id.values()]
+        images = list(images_by_id.values())
         images.sort(key=lambda x: x.id)
 
         return images, None

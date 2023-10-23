@@ -47,10 +47,7 @@ class TestTorchDataset:
                 image.img_path = image.img_path.as_posix()
                 Image.new(mode="RGB", size=(20, 20)).save(image.img_path)
 
-            for x in td:
-                pass
-
-            td[0:-1]
+            td[:-1]
 
     def test_picklable(self):
         dataset = TorchDataset(FakeDataset())

@@ -27,8 +27,12 @@ class TestMultiProcessZipFile(unittest.TestCase):
         with self._with_test_zip({'test.txt': b'contents'}) as zip_filepath:
             zip_file = MultiProcessZipFile(zip_filepath)
             queue = multiprocessing.Queue()
-            processes = [multiprocessing.Process(target=open_zipfile, args=(zip_file, 'test.txt', queue)) for i in
-                         range(5)]
+            processes = [
+                multiprocessing.Process(
+                    target=open_zipfile, args=(zip_file, 'test.txt', queue)
+                )
+                for _ in range(5)
+            ]
             [p.start() for p in processes]
             [p.join() for p in processes]
 
